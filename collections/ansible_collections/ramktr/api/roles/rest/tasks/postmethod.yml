@@ -1,0 +1,21 @@
+- name: "POST Request"
+  ansible.builtin.uri:
+    url: "{{ item.url }}"
+    method: "POST"
+    headers:
+      Content-Type: "application/json"
+    body: "{{ item.body }}"
+    body_format: "json"
+    return_content: true
+    status_code: 201
+  loop: "{{ payloads }}"
+  register: postresponse
+  
+- name: "Set facts to create a runtime variable to print url, json body and status code"
+  set_fact:
+    statuscode: "{{ statuscode | default([]) + [{'URL': item.url, 'Message': item.json.message, 'status': item.status}] }}"
+  loop: "{{ postresponse.results }}"
+
+- name: "View POST Response"
+  debug:
+    msg: "{{statuscode}}"

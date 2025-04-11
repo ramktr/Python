@@ -1,0 +1,24 @@
+- name: "Get Request with Errorhandling"
+  block:
+    - name: "GET Request"
+      ansible.builtin.uri:
+        url: "{{ item }}"
+        method: "GET"
+        return_content: true
+        status_code: 
+           - 200
+          # - 404
+      register: getresponse
+      failed_when: false
+      loop: "{{ payloads }}"
+
+    - name: "Set facts to create a runtime variable to print json body and status code"
+      set_fact:
+        endresult: "{{ endresult | default([]) + [{'URL': item.url, 'json': item.json, 'status': item.status}] }}"
+      loop: "{{ getresponse.results }}"
+
+    - name: "View from set_fact"
+      debug:
+        msg: "{{ endresult }}"
+  rescue:
+    - name: "Capture any other errors apart from 200 or 400"

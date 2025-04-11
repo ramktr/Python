@@ -1,6 +1,6 @@
 import requests
 import json
-uri = "https://jsonplaceholder.typicode.com/comments"
+uri = "https://jsonplaceholder.typicode.com/comments/1"
 
 response = requests.get(url=uri) #saving the GET response to a variable called response
 data = response.json()           #Response body parsed as JSON (returns Python dict)

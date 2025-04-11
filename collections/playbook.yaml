@@ -1,0 +1,17 @@
+- name: Collection Testing
+  hosts: localhost
+  gather_facts: true
+  vars:
+     method: "{{ method | default('GET') | upper }}"
+  tasks:
+    - name: "Invoke Get Roles"
+      ansible.builtin.include_role:
+        name: ramktr.api.rest
+        tasks_from: "getmethod"
+      when: method == "GET"
+
+    - name: "Invoke Post Roles"
+      ansible.builtin.include_role:
+        name: ramktr.api.rest
+        tasks_from: "postmethod"
+      when: method == "POST"
